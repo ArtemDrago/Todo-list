@@ -1,6 +1,7 @@
 import React, { useMemo, useState,useEffect } from "react";
 import {observer} from "mobx-react-lite"
 import todo from "../store/Todo";
+import "../style/TodoSetting.scss"
 
 
 const TodoSetting = observer(() => {
