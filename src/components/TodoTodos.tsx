@@ -3,7 +3,7 @@ import {observer} from "mobx-react-lite"
 import todo from "../store/Todo";
 
 const TodoTodos = observer( () => {
-
+   
    return (
       <div >
          {todo.todos.length === 0 ?
@@ -26,3 +26,5 @@ const TodoTodos = observer( () => {
    })
    
    export default TodoTodos;
+
+

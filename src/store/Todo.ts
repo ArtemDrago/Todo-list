@@ -1,3 +1,4 @@
+import axios from "axios"
 import { makeAutoObservable , runInAction} from "mobx"
 
 interface newTodo {
@@ -7,37 +8,43 @@ interface newTodo {
 }
 
 class Todo {
-   arrey = [
-      {id:1 , title: "по завтракать" , completed: false},
-      {id:2 , title: "помыть машину" , completed: false},
-      {id:3 , title: "по обедать" ,  completed: false},
-   ]
-   current: String = 'all'
-   
-   todos = this.arrey
-   
+   arrey: any[]  = []
    constructor() {
       makeAutoObservable(this)
    }
-   
+
+   getArrey = async () => {
+         try {
+            const responce = await axios.get('https://jsonplaceholder.typicode.com/todos' , {
+            params: {_limit: 10}}
+            )
+               runInAction( () => {
+                  this.arrey = [...responce.data]
+                  this.todos = this.arrey
+               })
+         } catch (e) {
+            console.log(e)
+         } 
+   }
+
+   current: String = 'all'
+   todos = this.arrey
    sortetTodo = (select: String) => {
       if (select === 'all') {
          runInAction( () => {
             return this.todos = this.arrey
          })
-        
       }
       if (select === 'process') {
          runInAction( () => {
             this.todos = this.arrey
             return this.todos = this.todos.filter(todo => todo.completed === false)
          })
-        
       }
       if (select === 'end') {
          runInAction( () => {
             this.todos = this.arrey
-     return this.todos = this.todos.filter(todo => todo.completed === true)
+      return this.todos = this.todos.filter(todo => todo.completed === true)
          })
       }
    }
@@ -61,8 +68,6 @@ class Todo {
          this.arrey =  this.arrey.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo)
          this.sortetTodo(this.current)
       })
-     
    }
-
 }
 export default new Todo()
